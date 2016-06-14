@@ -12,38 +12,26 @@ namespace Test
 {
    public static class PluginLoader
     {
-        public static List<IPlugin> GetPlugins(string pluginSearchPath)
+        public static List<IPlugin> GetPlugins(string pluginSearchDir)
         {
-            var loadedAssemblys = new List<Assembly>();
+            var loadedPlugins = new List<IPlugin>();
 
-            foreach (var file in Directory.GetFiles(pluginSearchPath))
+            foreach (var file in Directory.GetFiles(pluginSearchDir))
             {
 
-                var name = AssemblyName.GetAssemblyName(file);
-                var a = Assembly.Load(name);
-                loadedAssemblys.Add(a); // This could possibly leave the reference open to the assembly and keep a file lock.
-            }
-
-            var pluginNames = new List<Type>();
-            foreach (Assembly loadedAssembly in loadedAssemblys)
-            {
-                foreach (var t in loadedAssembly.GetTypes().Where(la=>!la.IsInterface && !la.IsAbstract))      
+                var assemblyName = AssemblyName.GetAssemblyName(file);
+                var assembly = Assembly.Load(assemblyName);
+                var types = assembly.GetTypes().Where(a => !a.IsInterface && !a.IsAbstract);
+                foreach (var type in types)
                 {
-                    if (t.GetInterface(typeof (IPlugin).FullName) != null)
+                    if (type.GetInterface(typeof(IPlugin).FullName) != null)
                     {
-                        pluginNames.Add(t);
+                        loadedPlugins.Add((IPlugin)Activator.CreateInstance(type));
                     }
                 }
-            }
-            var rtnLst = new List<IPlugin>();
-            foreach (var pluginName in pluginNames)
-            {
-                var p = (IPlugin)Activator.CreateInstance(pluginName);
-                rtnLst.Add(p);
 
             }
-
-            return rtnLst;
+            return loadedPlugins;
         }  
     }
 }
