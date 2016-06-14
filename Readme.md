@@ -7,17 +7,18 @@ https://msdn.microsoft.com/en-us/library/ms173156.aspx
 To create a plugin that can be consumed by the project simply do the following:- 
 + Create a new Project and Reference the PluginInterface project or dll. 
 + Create a public class and implement the IPlugin interface. 
-
-    public class NewPlugin : IPlugin  
-    {  
-        public string Name {
-            get{ return "NewPlugin";}
-        }
-        
-        public void Work(){
-        //Do Stuff
-        }
-    }    
+```csharp
+public class NewPlugin : IPlugin  
+{  
+    public string Name {
+        get{ return "NewPlugin";}
+    }
+    
+    public void Work(){
+    //Do Stuff
+    }
+}   
+```
 + Build and drop the DLL in the plugins directory. 
 + Win!
 
