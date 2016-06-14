@@ -8,7 +8,7 @@ namespace PluginInterface
 {
     public interface IPlugin   
     {
-        string name { get; }
+        string Name { get; }
         void Work();
     }
 }
