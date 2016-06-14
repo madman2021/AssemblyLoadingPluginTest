@@ -8,17 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using PluginInterface;
 
-namespace Test
+namespace Plugins
 {
    public static class PluginLoader
     {
         public static List<IPlugin> GetPlugins(string pluginSearchDir)
         {
             var loadedPlugins = new List<IPlugin>();
-
-            foreach (var file in Directory.GetFiles(pluginSearchDir))
+            foreach (var file in Directory.GetFiles(pluginSearchDir,"*.dll"))
             {
-
                 var assemblyName = AssemblyName.GetAssemblyName(file);
                 var assembly = Assembly.Load(assemblyName);
                 var types = assembly.GetTypes().Where(a => !a.IsInterface && !a.IsAbstract);
@@ -29,7 +27,6 @@ namespace Test
                         loadedPlugins.Add((IPlugin)Activator.CreateInstance(type));
                     }
                 }
-
             }
             return loadedPlugins;
         }  
