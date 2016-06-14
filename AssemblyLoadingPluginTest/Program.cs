@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssemblyLoadingPluginTest
+namespace PluginInterface
 {
-    class Program
+    public interface IPlugin   
     {
-        static void Main(string[] args)
-        {
-        }
+        string name { get; }
+        void Work();
     }
 }
